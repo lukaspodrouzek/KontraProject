@@ -32,3 +32,16 @@
 .location-card:hover {
     transform: scale(1.03);
 }
+
+
+.star-icon {
+    transition: color 0.2s;
+}
+.star-icon.hovered,
+.star-icon.hovered ~ .star-icon {
+    color: #ccc
+}
+.star-icon.hovered.active,
+.star-icon.hovered.active ~ .star-icon {
+    color: #ffc107
+}

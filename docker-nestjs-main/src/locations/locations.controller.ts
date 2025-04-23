@@ -1,4 +1,4 @@
-import { Controller, Get, Param, Post, Body, Delete } from '@nestjs/common';
+import {Controller, Get, Param, Post, Body, Delete, Put, Patch, ParseIntPipe} from '@nestjs/common';
 import { LocationsService } from './locations.service';
 import { CommentsService} from "../comments/comments.service";
 import { Location } from './model/location.entity';
@@ -30,7 +30,7 @@ export class LocationsController {
         return this.service.getRating(+id);
     }
 
-    @Post(':id/rating')
+    @Post('/:id/rating')
     setRating(@Param('id') id: number, @Body('rating') rating: number) {
         return this.service.setRating(id, rating);
     }
@@ -43,5 +43,13 @@ export class LocationsController {
     @Delete(':id')
     remove(@Param('id') id: number) {
         return this.service.delete(+id);
+    }
+
+    @Patch(':id')
+    update(
+        @Param('id', ParseIntPipe) id: number,
+        @Body() data: { name: string; description: string }
+    ) {
+        return this.service.update(id, data);
     }
 }

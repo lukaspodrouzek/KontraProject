@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import {Injectable, NotFoundException} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Location } from './model/location.entity';
@@ -28,7 +28,7 @@ export class LocationsService {
         return this.locationRepo.find({
             where: { city: { id: cityId } },
             relations: ['city', 'comments'],
-        });
+        })
     }
 
     getRating(id: number) {
@@ -52,4 +52,13 @@ export class LocationsService {
     async delete(id: number) {
         return this.locationRepo.delete(id);
     }
+
+    async update(id: number, data: { name: string; description: string }) {
+        const location = await this.locationRepo.findOneBy({ id });
+        if (!location) throw new NotFoundException('Location not found');
+
+        Object.assign(location, data);
+        return this.locationRepo.save(location);
+    }
+
 }
